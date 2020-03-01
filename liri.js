@@ -1,19 +1,19 @@
 
-// var env = require(".env").config();
+require("dotenv").config();
 // var require
-// var keys = require("./keys.js");
+var keys = require("./keys.js");
 // var spotify = new Spotify(keys.spotify);
 var fs = require("fs");
 var axios = require("axios");
 var appSelection = process.argv[2];
 var userChoice = process.argv[3];
-
+console.log(process.env);
 // if userChoice extends one word
 for (var i = 4; i < process.argv.length; i++) {
     userChoice += "+" + process.argv[i];
 };
 
-
+console.log(spotify)
 //present directions
 // console.log("Welcome to LIRI BOT! To utilize effectively, please follow the follow syntax!");
 // console.log("To look up a concert type 'node liri.js concert-this <artist/band name here>'.");
