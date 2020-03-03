@@ -24,7 +24,7 @@ function saveChoice() {
             console.log(err);
         }
         else {
-            console.log("Content Added!");
+            // console.log("Content Added!");
         }
     });
 };
@@ -44,6 +44,10 @@ function userSelection() {
             getMusic();
             break;
         case "movie-this":
+            if (userChoice === false) {
+                userchoice = "mr.nobody";
+                yearHolder = "2009";
+            }
             saveChoice();
             getMovie();
             break;
@@ -66,6 +70,7 @@ function getMovie() {
             console.log("Movie Title: " + response.data.Title);
             console.log("Release Year: " + response.data.Year);
             console.log("IMDB Rating: " + response.data.imdbRating);
+            console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
             console.log("Produced in: " + response.data.Country);
             console.log("Language: " + response.data.Language);
             console.log("Plot: " + response.data.Plot);
