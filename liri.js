@@ -1,11 +1,13 @@
 // var require
 require("dotenv").config();
 var keys = require("./keys.js");
-// var Spotify = require('node-spotify-api');
-// var spotify = new Spotify({
-//     id: keys.id,
-//     secret: keys.secret
-// });
+var Spotify = require('node-spotify-api');
+var spotify = new Spotify({
+    id: keys.spotify.id,
+    secret: keys.spotify.secret
+});
+// console.log(keys.id);
+// console.log(keys.spotify.id);
 // console.log(spotify);
 var fs = require("fs");
 var axios = require("axios");
@@ -16,7 +18,10 @@ var userChoice = process.argv[3];
 for (var i = 4; i < process.argv.length; i++) {
     userChoice += "+" + process.argv[i];
 };
+// variables for saving userInput and requestiong queries!
 var saveThis = appSelection + " " + userChoice;
+var movieQuery = "http://www.omdbapi.com/?t=" + userChoice + "&y=&plot=short&apikey=trilogy";
+var bandQuery = "http://rest.bandsintown.com/artists/" + userChoice + "/events?app_id=codingbootcamp";
 // function to append userChoice to log
 function saveChoice() {
     fs.appendFile("log.txt", saveThis + "\n", function (err) {
@@ -28,44 +33,34 @@ function saveChoice() {
         }
     });
 };
-
-
 //switch that runs if user searches a particular thing, spotify, omdb, etc
 function userSelection() {
-
     switch (appSelection) {
         case "concert-this":
             saveChoice();
             getBands();
             break;
         case "spotify-this-song":
-            userChoice += "'" + userChoice + "'";
             saveChoice();
             getMusic();
             break;
         case "movie-this":
-            if (userChoice === false) {
-                userchoice = "mr.nobody";
-                yearHolder = "2009";
-            }
             saveChoice();
             getMovie();
             break;
         // read random log
         case "do-what-it-says":
             break;
-        // 
         case "random-history":
             // display previous user search at random from log.txt
             randomHistory();
             break;
-
     };
 };
 //function fetch movie information
 function getMovie() {
     //function that appends search information to txt file, include function inside of switch
-    axios.get("http://www.omdbapi.com/?t=" + userChoice + "&y=&plot=short&apikey=trilogy").then(
+    axios.get(movieQuery).then(
         function (response) {
             console.log("Movie Title: " + response.data.Title);
             console.log("Release Year: " + response.data.Year);
@@ -94,14 +89,16 @@ function getMovie() {
 }
 // function to get bands
 function getBands() {
-    axios.get("http://rest.bandsintown.com/artists/" + userChoice + "/events?app_id=codingbootcamp").then(
+    axios.get(bandQuery).then(
         function (response) {
+            console.log(response.data.venue)
+
             // date.moment().subtract(10, 'days').calendar() = response.data.datetime;
             // // console.log("The movie's rating is: " + response.data.imdbRating);
-            console.log("Concert Venue: " + response.data.venue);
+            // console.log("Concert Venue: " + response.data.venue);
             // // console.log("Venue Location: " + response.data.venue);
             // console.log("Date of Event: " + date);
-            console.log(response);
+            // console.log(response);
 
         })
         .catch(function (error) {
@@ -124,41 +121,30 @@ function getBands() {
             }
             console.log(error.config);
         });
-}
+};
 // function to utilize spotify
 function getMusic() {
-    spotify
-        .search({ type: 'track', query: userChoice })
-        .then(function (data) {
-            console.log(data);
+    spotify.search({ type: 'track', query: userChoice, limit: 1 }).then(function(response) {
+    console.log("Song Name: " + response.tracks.items[0].name);
+    console.log("Album Title: " + response.tracks.items[0].album.name);
+    console.log("Preview Link: " + response.tracks.items[0].preview_url);
+    console.log("Artist: " + response.tracks.items[0].artists[0].name);
+    console.log("Release Date: " + response.tracks.items[0].album.release_date);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
+};
+    // function to randomly draw from user history at random
+    function randomHistory() {
+        fs.readFile("log.txt", "utf8", function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            var history = data.split("\n");
+            var i = Math.floor(Math.random() * history.length);
+            console.log(history[i]);
+            // userSelection();
         })
-};
-// function to randomly draw from user history at random
-function randomHistory() {
-    fs.readFile("log.txt", "utf8", function (err, data) {
-        if (err) {
-            return console.log(err);
-        }
-        var history = data.split("\n");
-        var i = Math.floor(Math.random() * history.length);
-        console.log(history[i]);
-        // userSelection();
-    })
-};
-userSelection();
-// spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
-//     if (err) {
-//       return console.log('Error occurred: ' + err);
-//     }
-
-
-
-
-                    // console.log(spotify)
-                    //present directions
-                    // console.log("Welcome to LIRI BOT! To utilize effectively, please follow the follow syntax!");
-                    // console.log("To look up a concert type 'node liri.js concert-this <artist/band name here>'.");
-                    // console.log("To look up a song type 'node liri.js spotify-this-song <song title here>'.");
-                    // console.log("To look up a movie type 'node liri.js movie-this <movie title here>'.");
-                    // console.log("To randomly grab a previous search type 'do-what-it-says'.")
-                    // console.log("To display all previous searches type 'display-all-searches'. Enjoy!");
+    };
+    userSelection();
