@@ -48,3 +48,9 @@ To randomly select a previous search from user history type the following into t
 To display the User History in it's entirety, type the following into the command line.
   * node liri.js display-history*
   ![](displayhistory.gif)
+
+
+## OverView
+The app uses node plug-ins *Axios*, *Moment*, *Node Spotify API*, and *DotEnv*. *Axios* is used for API calls to *Node-Spotify-API*(which supplies the response for *spotify-this-song*), OMDB API (which supplies the response for *movie-this*), and Bands In Town API (which supplies the response for *concert-this*).
+*Moment* is used to convert the "datetime" response from Bands In Town in order to present the user with a MM/DD/YYYY format.
+*DotEnv* is used to load environment variables from a .env file into *process.env*.
