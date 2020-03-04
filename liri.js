@@ -14,10 +14,9 @@ var userChoice = process.argv[3];
 for (var i = 4; i < process.argv.length; i++) {
     userChoice += "+" + process.argv[i];
 };
-// variables for saving userInput and requestiong queries!
+// variable for appending user's current search
 var saveThis = appSelection + " " + userChoice;
-var movieQuery = "http://www.omdbapi.com/?t=" + userChoice + "&y=&plot=short&apikey=trilogy";
-var bandQuery = "http://rest.bandsintown.com/artists/" + userChoice + "/events?app_id=codingbootcamp&from=0&to=8";
+
 // function to append userChoice to log
 function saveChoice() {
     fs.appendFile("log.txt", saveThis + "\n", function (err) {
@@ -41,11 +40,12 @@ function userSelection() {
             getMusic();
             break;
         case "movie-this":
-                saveChoice();
-                getMovie();
+            saveChoice();
+            getMovie();
             break;
         // read random log
-        case "do-what-it-says":
+        case "display-history":
+            randomHistory();
             break;
         case "random-history":
             // display previous user search at random from log.txt
@@ -55,6 +55,7 @@ function userSelection() {
 };
 //function fetch movie information
 function getMovie() {
+    var movieQuery = "http://www.omdbapi.com/?t=" + userChoice + "&y=&plot=short&apikey=trilogy";
     //function that appends search information to txt file, include function inside of switch
     axios.get(movieQuery).then(
         function (response) {
@@ -85,6 +86,7 @@ function getMovie() {
 }
 // function to get bands
 function getBands() {
+    var bandQuery = "http://rest.bandsintown.com/artists/" + userChoice + "/events?app_id=codingbootcamp&from=0&to=8";
     axios.get(bandQuery).then(
         function (response) {
             console.log("Artist: " + response.data[0].artist.name);
@@ -128,8 +130,29 @@ function randomHistory() {
             return console.log(err);
         }
         var history = data.split("\n");
+        if (appSelection === "display-history") {
+            for (var e = 0; e < history.length; e++) {
+                console.log(history[e]);
+            }
+        }
         var i = Math.floor(Math.random() * history.length);
-        console.log(history[i]);
+        var a = history[i].charAt(0);
+        switch (a) {
+            case "c":
+                userChoice = history[i].substring(12);
+                getBands();
+                break;
+            case "s":
+                userChoice = history[i].substring(17);
+                getMusic();
+                break;
+            case "m": {
+                userChoice = history[i].substring(10);
+                getMovie();
+                break;
+            }
+        }
     })
 };
 userSelection();
+
