@@ -32,14 +32,23 @@ function saveChoice() {
 function userSelection() {
     switch (appSelection) {
         case "concert-this":
+            if (!userChoice) {
+                userChoice = "Blink 182";
+            }
             saveChoice();
             getBands();
             break;
         case "spotify-this-song":
+            if (!userChoice) {
+                userChoice = "The Sign";
+            }
             saveChoice();
             getMusic();
             break;
         case "movie-this":
+            if (!userChoice) {
+                userChoice = "Mr. Nobody";
+            }
             saveChoice();
             getMovie();
             break;
@@ -92,7 +101,10 @@ function getBands() {
             console.log("Artist: " + response.data[0].artist.name);
             console.log("Venue: " + response.data[0].venue.name);
             console.log("Venue Location: " + response.data[0].venue.city + "," + response.data[0].venue.region);
-            console.log(response.data[0].datetime);
+            // var dateOfShow = response.data[0].datetime.moment().format("L");
+            // console.log(response.data[0].datetime);
+            // console.log(dateOfShow);
+            
         })
         .catch(function (error) {
             if (error.response) {
