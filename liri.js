@@ -147,24 +147,25 @@ function randomHistory() {
                 console.log(history[e]);
             }
         }
-        var i = Math.floor(Math.random() * history.length);
-        var a = history[i].charAt(0);
-        switch (a) {
-            case "c":
-                userChoice = history[i].substring(12);
-                getBands();
-                break;
-            case "s":
-                userChoice = history[i].substring(17);
-                getMusic();
-                break;
-            case "m": {
-                userChoice = history[i].substring(10);
-                getMovie();
-                break;
-            }
+        else if (appSelection === "random-history") {
+            var     i = Math.floor(Math.random() * history.length);
+            var a = history[i].charAt(0);
+            switch (a) {
+                case "c":
+                    userChoice = history[i].substring(12);
+                    getBands();
+                    break;
+                case "s":
+                    userChoice = history[i].substring(17);
+                    getMusic();
+                    break;
+                case "m": 
+                    userChoice = history[i].substring(10);
+                    getMovie();
+                    break;
+                }
         }
-    })
-};
+        });
+    };
 userSelection();
 
