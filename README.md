@@ -10,6 +10,7 @@ To use LIRI, clone this repository into your a folder on your computer. Enter th
 
 #### Commands
 **ALL COMMANDS TO BE EXECUTED AFTER CALLING NODE AND THE LIRI PROGRAM:**
+
 *node liri.js*
 ###### Song Search:
 *spotify-this-song*
