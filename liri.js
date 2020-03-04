@@ -8,6 +8,7 @@ var spotify = new Spotify({
 });
 var fs = require("fs");
 var axios = require("axios");
+var moment = require('moment');
 var appSelection = process.argv[2];
 var userChoice = process.argv[3];
 // if userChoice extends one word
@@ -98,13 +99,12 @@ function getBands() {
     var bandQuery = "http://rest.bandsintown.com/artists/" + userChoice + "/events?app_id=codingbootcamp&from=0&to=8";
     axios.get(bandQuery).then(
         function (response) {
+            var dateOfShow = response.data[0].datetime;
+            var showTime = moment(dateOfShow, "YYYY-MM-DD HH:mm").format("l");
             console.log("Artist: " + response.data[0].artist.name);
             console.log("Venue: " + response.data[0].venue.name);
             console.log("Venue Location: " + response.data[0].venue.city + "," + response.data[0].venue.region);
-            // var dateOfShow = response.data[0].datetime.moment().format("L");
-            // console.log(response.data[0].datetime);
-            // console.log(dateOfShow);
-            
+            console.log("Show Date: " + showTime);
         })
         .catch(function (error) {
             if (error.response) {
