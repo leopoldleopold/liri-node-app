@@ -1,4 +1,4 @@
-# **LIRI *(Language Interpretation and Recgonition Interface)* NODE APP** 
+# **LIRI *(Language Interpretation and Recogonition Interface)* NODE APP** 
 
 
 ### What LIRI Does
